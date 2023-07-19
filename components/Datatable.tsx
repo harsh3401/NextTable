@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, ReactNode, Key } from "react";
 import {
   IconButton,
   Box,
@@ -18,7 +18,14 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-
+interface rowData {
+  purchaseId: Key | null | undefined;
+  timestamp: string;
+  name: string;
+  status: React.JSX.Element;
+  email: string;
+  select: React.JSX.Element;
+}
 const Datatable = ({
   pagination,
   caption,
@@ -29,38 +36,27 @@ const Datatable = ({
 }: {
   caption?: String;
   headers: string[];
-  rowData: {}[];
+  rowData: rowData[];
   sortable?: boolean;
   pagination?: boolean;
   selectable?: boolean;
 }) => {
   //Table state
 
-  const [selectedRows, setSelectedRows] = useState(
-    new Array(rowData.length).fill(false)
-  );
-  const [selectedRowCount, setSelectedRowCount] = useState(0);
-
   const [rows, setRows] = useState(
     //Adding select button conditionally
     selectable
       ? () => {
           headers.splice(0, 0, "select");
-          return rowData.map((row, index) => {
+          return rowData.map((row: rowData, index) => {
             return {
               ...row,
               select: (
                 <Checkbox
                   onChange={(e) => {
-                    setSelectedRows((selectedRows) => {
-                      const newCheck = [...selectedRows];
-                      newCheck[index] = e.target.checked;
-
-                      return newCheck;
-                    });
+                    //selection function to be performed
                   }}
-                  key={index}
-                  checked={selectedRows[index]}
+                  key={row.purchaseId}
                 />
               ),
             };
@@ -187,17 +183,14 @@ const Datatable = ({
     if (pagination) {
       setDisplayRows(paginationCompute());
     }
-  }, [paginationState.rowsPerPage, paginationState.page, paginationCompute]);
+  }, [
+    paginationState.rowsPerPage,
+    paginationState.page,
+    paginationCompute,
+    rows,
+    pagination,
+  ]);
 
-  useEffect(() => {
-    let count = 0;
-    selectedRows.forEach((row) => {
-      if (row) {
-        count++;
-      }
-    });
-    setSelectedRowCount(count);
-  }, [selectedRows]);
   //constants
   const RowString =
     (paginationState.page - 1) * paginationState.rowsPerPage +
@@ -208,7 +201,6 @@ const Datatable = ({
     " of " +
     rows.length;
 
-  // const selectedString =
   return (
     <Box
       border={"2px"}
@@ -247,42 +239,39 @@ const Datatable = ({
         </TableContainer>
       </Center>
       {pagination ? (
-        <Flex color={"white"} justify={"space-between"} align={"center"}>
-          <p className="pl-10">{selectedRowCount + " rows selected"}</p>
-          <Flex justify={"end"} align={"center"}>
-            <p>Rows per page:</p>
-            <span>&nbsp;&nbsp;</span>
-            {/* <p>{paginationState.rowsPerPage}</p> */}
+        <Flex color={"white"} justify={"end"} align={"center"}>
+          <p>Rows per page:</p>
+          <span>&nbsp;&nbsp;</span>
+          {/* <p>{paginationState.rowsPerPage}</p> */}
 
-            <Select
-              width={"3rem"}
-              size="md"
-              marginEnd={"1rem"}
-              value={paginationState.rowsPerPage.toString()}
-              variant={"unstyled"}
-              onChange={handleRowCountSelect}
-            >
-              <option value={"5"}>5</option>
-              <option value={"7"}>7</option>
-            </Select>
+          <Select
+            width={"3rem"}
+            size="md"
+            marginEnd={"1rem"}
+            value={paginationState.rowsPerPage.toString()}
+            variant={"unstyled"}
+            onChange={handleRowCountSelect}
+          >
+            <option value={"5"}>5</option>
+            <option value={"7"}>7</option>
+          </Select>
 
-            <p> {RowString}</p>
-            <Flex>
-              <IconButton
-                isDisabled={paginationState.page == 1}
-                aria-label="Go Back"
-                color={"white"}
-                _hover={{ background: "white", color: "black" }}
-                icon={<ChevronLeftIcon onClick={prevPage} />}
-              />
-              <IconButton
-                aria-label="Go Ahead"
-                _hover={{ background: "white", color: "black" }}
-                color={"white"}
-                isDisabled={paginationState.page == paginationState.maxPages}
-                icon={<ChevronRightIcon onClick={nextPage} />}
-              />
-            </Flex>
+          <p> {RowString}</p>
+          <Flex>
+            <IconButton
+              isDisabled={paginationState.page == 1}
+              aria-label="Go Back"
+              color={"white"}
+              _hover={{ background: "white", color: "black" }}
+              icon={<ChevronLeftIcon onClick={prevPage} />}
+            />
+            <IconButton
+              aria-label="Go Ahead"
+              _hover={{ background: "white", color: "black" }}
+              color={"white"}
+              isDisabled={paginationState.page == paginationState.maxPages}
+              icon={<ChevronRightIcon onClick={nextPage} />}
+            />
           </Flex>
         </Flex>
       ) : null}
