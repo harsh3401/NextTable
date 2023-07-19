@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 import { Providers } from "./providers";
-
+import './globals.css'
 export const metadata: Metadata = {
   title: 'Tryp.com',
   description: 'Data Table for internal tool',

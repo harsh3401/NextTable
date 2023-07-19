@@ -1,6 +1,7 @@
 // app/providers.tsx
 'use client'
 
+import { newTheme } from '@/theme'
 import { CacheProvider } from '@chakra-ui/next-js'
 import { ChakraProvider } from '@chakra-ui/react'
 
@@ -11,7 +12,7 @@ export function Providers({
   }) {
   return (
     <CacheProvider>
-      <ChakraProvider>
+      <ChakraProvider theme={newTheme}>
         {children}
       </ChakraProvider>
     </CacheProvider>
