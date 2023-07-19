@@ -90,7 +90,7 @@ const Datatable = ({
     return headers.map((headerName: string, key: Number) => {
       if (sortable) {
         type objectType = (typeof rows)[0];
-        const keyobj = headerName.toLowerCase() as keyof (typeof rows)[0];
+        const keyobj = headerName.toLowerCase() as keyof objectType;
         const columnType = typeof rows[0][keyobj];
         const sortableType = columnType == "string";
         return (
