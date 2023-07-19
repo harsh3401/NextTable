@@ -1,25 +1,27 @@
 "use client";
 import { Tag, TagLabel } from "@chakra-ui/react";
 import React from "react";
-import { useMemo } from "react";
+
 const StatusComponent = ({ status }: { status: number }) => {
+  //random value to mock data
   const value = status % 3;
+  //color scheme and values for various statuses
   const keys = ["Waiting", "Paid", "Failed"];
   const colors = ["yellow.200", "green.200", "red.200"];
 
   return (
-    <div className="flex flex-row items-center">
-      <Tag
-        size={"md"}
-        fontWeight={"bold"}
-        borderRadius="full"
-        variant="solid"
-        bg={colors[value]}
-        textColor={"brown"}
-      >
-        <TagLabel>{keys[value]}</TagLabel>
-      </Tag>
-    </div>
+    <Tag
+      size={"md"}
+      fontWeight={"bold"}
+      borderRadius="full"
+      variant="solid"
+      width={"5rem"}
+      justifyContent={"center"}
+      bg={colors[value]}
+      textColor={"brown"}
+    >
+      <TagLabel>{keys[value]}</TagLabel>
+    </Tag>
   );
 };
 export default StatusComponent;
