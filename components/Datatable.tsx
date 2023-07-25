@@ -152,7 +152,11 @@ const Datatable = ({
       ...paginationState,
       rowsPerPage: newRowCount,
       page:
-        paginationState.page > newMaxPages ? newMaxPages : paginationState.page,
+        paginationState.page > newMaxPages
+          ? newMaxPages
+          : paginationState.page == paginationState.maxPages
+          ? newMaxPages
+          : paginationState.page,
       maxPages: newMaxPages,
     });
   };
@@ -226,7 +230,8 @@ const Datatable = ({
 
             <Thead>
               <Tr
-                position={"sticky"}
+                // position={"sticky"}
+
                 zIndex={"10"}
                 background={"white"}
                 top={"0"}
